@@ -1,0 +1,33 @@
+{
+  "name": "rcm/portal-options",
+  "description": "Portal Options Links",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "reliv",
+    "content",
+    "manager",
+    "plugin",
+    "rcm"
+  ],
+  "homepage": "https://github.com/reliv/rcm-portal-options",
+  "authors": [
+    {
+      "name": "Inna Davis",
+      "email": "idavis@relivinc.com",
+      "homepage": "http://www.reliv.com/"
+    }
+  ],
+  "require": {
+    "php": ">=5.*",
+    "rwoverdijk/assetmanager": "1.*",
+    "rcm/core": "1.*"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "RcmPortalOptions\\": "src/"
+    }
+  }
+}
