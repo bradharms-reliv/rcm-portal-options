@@ -14,7 +14,7 @@
  * @version   GIT: <git_id>
  */
 
-var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
+var RcmPortalOptionsEdit = function (instanceId, container) {
 
     /**
      * Always refers to this object unlike the 'this' JS variable;
@@ -29,34 +29,10 @@ var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
      * @type {String}
      */
     var newLinkTemplate = '<div class="row portalMenuItem">'
-    + '<div class="col-xs-12">'
-    + '<div class="removeItem">'
-    + '<a><span class="glyphicon glyphicon-remove"></span></a>'
-    + '</div>'
-    + '<div class="editItem">'
-    + '<a><span class="glyphicon glyphicon-pencil"></span></a>'
-    + '</div>'
+            + '<div class="link col-xs-12">'
     + '<div class="menuItem">'
-    + '<span><a href="">Untitled Link</a></span>'
-    + '</div>'
-    + '</div>'
-    + '</div>';
-
-    /**
-     * jQuery object for the two links
-     *
-     * @type {Object}
-     */
-    //var aTags = container.find('a');
-
-    var menuItemLink = container.find('.menuItem a');
-
-    var removeButton = container.find('.removeItem');
-    var editButton = container.find('.editItem');
-    var addItem = container.find('.addNewItem');
-    var tipFlyOut = container.find('.tipFlyOut');
-
-    console.log(pluginHandler);
+    + '<span><a href="/">Untitled Link</a></span>'
+    + '</div></div></div>';
 
 
     /**
@@ -64,49 +40,66 @@ var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
      */
     self.initEdit = function () {
 
-        addItem.click(function() {
-            console.log('clicked');
-            container.find('#rcmPortalOptions').append(newLinkTemplate);
-        });
-
-
-        addItem.removeClass('hidden');
-        removeButton.removeClass('hidden');
-        editButton.removeClass('hidden');
-
-        editButton.hover(function () {
-            tipFlyOut.removeClass('hidden');
-        }, function () {
-            tipFlyOut.addClass('hidden');
-        });
-
         //Double clicking will show properties dialog
-        container.dblclick(self.showEditDialog);
+        container.delegate('a', 'dblclick', function (event) {
+            event.stopPropagation();
+            self.showEditDialog($(this));
+        });
 
         //Add right click menu
         $.contextMenu({
-            selector: rcm.getPluginContainerSelector(instanceId),
+            selector: rcm.getPluginContainerSelector(instanceId) + ' .menuItem',
             //Here are the right click menu options
             items: {
                 edit: {
-                    name: 'Edit Properties',
+                    name: 'Edit Link Properties',
                     icon: 'edit',
                     callback: function () {
-                        self.showEditDialog(this);
+                        self.showEditDialog(this, false);
+                    }
+                },
+                separator2: "-",
+                deleteLink: {
+                    name: 'Delete Link',
+                    icon: 'delete',
+                    callback: function () {
+                        var div = $(this);
+                        var a = $(this).parent();
+                        var divParent = div.parent();
+                        $().confirm(
+                            'Delete this link?<br><br>"' + a.html() + '"',
+                            function () {
+                                div.remove();
+                                //Don't let them delete the last link
+                                if (divParent.children('div').length == 0) {
+                                    div.append(newLinkTemplate);
+                                }
+                            }
+                        );
+                    }
+                },
+                separator3: "-",
+                createNew: {
+                    name: 'Create New Link',
+                    icon: 'edit',
+                    callback: function () {
+                        var newDiv = $(newLinkTemplate);
+                        $(this).parent().parent().parent().append(newDiv);
+                        self.showEditDialog(newDiv, true);
                     }
                 }
-
             }
         });
+
+        container.find('#rcmPortalOptions').sortable(
+            {
+                update: function () {
+                },
+                connectWith: rcm.getPluginContainerSelector(instanceId) + '#rcmPortalOptions'
+            }
+        );
     };
 
-    /**
-     * Remove the elements we need for editing from the DOM
-     */
-    self.removeEditElements = function () {
-        container.find('.tipFlyOut').remove();
-        container.find('.addNew').remove();
-    };
 
     /**
      * Called by content management system to get this plugins data for saving
@@ -115,9 +108,6 @@ var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
      * @return {Object}
      */
     self.getSaveData = function () {
-        removeButton.addClass('hidden');
-        editButton.addClass('hidden');
-        self.removeEditElements();
         return {
            'html': container.find('#rcmPortalOptions').html()
         }
@@ -126,11 +116,18 @@ var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
     /**
      * Displays a dialog box to edit href and image src
      */
-    self.showEditDialog = function (link) {
+    self.showEditDialog = function (link, deleteOnClose) {
 
-        console.log(link.text());
-        var srcInput = $.dialogIn('text', 'Link Title', menuItemLink.text());
-        var hrefInput = $.dialogIn('url', 'Link Url', menuItemLink.attr('href'));
+        var thisLink = '';
+
+        if (typeof(link.children('span').children('a').html()) == 'undefined') {
+            thisLink = link.children('div').children('div').children('span').children('a');
+        } else {
+            thisLink = link.children('span').children('a');
+        }
+
+        var srcInput = $.dialogIn('text', 'Link Title', thisLink.html());
+        var hrefInput = $.dialogIn('url', 'Link Url', thisLink.attr('href'));
 
         var form = $('<form></form>')
             .addClass('simple')
@@ -141,13 +138,15 @@ var RcmPortalOptionsEdit = function (instanceId, container, pluginHandler) {
                 width: 620,
                 buttons: {
                     Cancel: function () {
+                        if (deleteOnClose == true) {
+                            thisLink.remove();
+                        }
                         $(this).dialog("close");
                     },
                     Ok: function () {
-
                         //Get user-entered data from form
-                        menuItemLink.text(srcInput.val());
-                        menuItemLink.attr('href', hrefInput.val());
+                        thisLink.text(srcInput.val());
+                        thisLink.attr('href', hrefInput.val());
 
                         $(this).dialog('close');
                     }

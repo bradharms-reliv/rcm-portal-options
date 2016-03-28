@@ -1,9 +1,10 @@
 #rcmPortalOptions .menuItem {
     background-color: #0CB3B0;
-    height: 37px;
+    height: 34px;
     border-top-right-radius: 10pt;
     border-bottom-right-radius: 10pt;
     padding: 8px;
+    margin-bottom: -1px;
 }
 #rcmPortalOptions .menuItem span a {
     color: white;
@@ -12,51 +13,8 @@
     margin-bottom: 3px;
 }
 
-#rcmPortalOptions .addNewItem {
-    height: 37px;
-    background-color: rgba(145, 145, 145, 0.32);
-    /* border-color: grey; */
-    /* border-style: solid; */
-    border-top-right-radius: 10pt;
-    border-bottom-right-radius: 10pt;
-    padding: 6px;
-    border-width: 2pt;
-    color: #9E9E9E;
-}
-#rcmPortalOptions .editItem {
-    float: right;
-    /* top: 15px; */
-    /* margin-top: -20px; */
-    /* position: absolute; */
-    background-color: #DEDEDE;
-    width: 18px;
-    padding-left: 2px;
-}
-#rcmPortalOptions .removeItem {
-    padding-left: 3px;
-    background-color: #DEDEDE;
-    width: 20px;
-    float: right;
-    margin-left: 3px;
-}
-#rcmPortalOptions .tipFlyOut {
-    font-size: 9pt;
-    border: 2px solid #B5B5B5;
-    border-radius: 6px;
-    background-color: white;
-    width: 74px;
-    text-align: center;
-    padding: 3px;
-    position: absolute;
-    bottom: 14px;
-    z-index: 100;
-    left: 194px;
-}
-@media only screen and (min-width: 768px) {
-    #rcmPortalOptions .addNewItem {
-        max-width: 169px;
-    }
-    #rcmPortalOptions .portalMenuItem {
-        max-width: 197px;
+@media only screen and (max-width: 768px) {
+    .RcmPortalOptions.col-xs-4 {
+        width: 100%;
     }
 }
