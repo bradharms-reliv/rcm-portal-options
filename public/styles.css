@@ -1,0 +1,20 @@
+#rcmPortalOptions .menuItem {
+    background-color: #0CB3B0;
+    height: 34px;
+    border-top-right-radius: 10pt;
+    border-bottom-right-radius: 10pt;
+    padding: 8px;
+    margin-bottom: -1px;
+}
+#rcmPortalOptions .menuItem span a {
+    color: white;
+}
+#rcmPortalOptions .portalMenuItem {
+    margin-bottom: 3px;
+}
+
+@media only screen and (max-width: 768px) {
+    .RcmPortalOptions.col-xs-4 {
+        width: 100%;
+    }
+}

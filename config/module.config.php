@@ -25,10 +25,10 @@ return [
                 'modules/rcm-portal-options/' => __DIR__ . '/../public/',
             ],
             'collections' => [
-                'modules/rcm-admin/modules.css' => [
-                    'modules/rcm-portal-options/style.css'
+                'modules/rcm-admin/admin.css' => [
+                    'modules/rcm-portal-options/styles.css'
                 ],
-                'modules/rcm/admin.js' => [
+                'modules/rcm-admin/admin.js' => [
                     'modules/rcm-portal-options/rcm-portal-options-edit.js'
                 ],
             ],
