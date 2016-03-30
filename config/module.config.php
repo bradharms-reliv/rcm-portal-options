@@ -25,7 +25,7 @@ return [
                 'modules/rcm-portal-options/' => __DIR__ . '/../public/',
             ],
             'collections' => [
-                'modules/rcm-admin/admin.css' => [
+                'modules/rcm/modules.css' => [
                     'modules/rcm-portal-options/styles.css'
                 ],
                 'modules/rcm-admin/admin.js' => [
