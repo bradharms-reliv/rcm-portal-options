@@ -69,7 +69,6 @@ var RcmPortalOptionsEdit = function (instanceId, container) {
                         $().confirm(
                             'Delete this link?<br><br>"' + a.html() + '"',
                             function () {
-                                console.log(div);
                                 div.remove();
                                 //Don't let them delete the last link
                                 if (divParent.children('div').length == 0) {
