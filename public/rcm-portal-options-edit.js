@@ -139,7 +139,7 @@ var RcmPortalOptionsEdit = function (instanceId, container) {
                 buttons: {
                     Cancel: function () {
                         if (deleteOnClose == true) {
-                            thisLink.remove();
+                            link.remove();
                         }
                         $(this).dialog("close");
                     },
