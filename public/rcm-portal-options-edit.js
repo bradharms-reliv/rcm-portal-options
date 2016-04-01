@@ -126,12 +126,30 @@ var RcmPortalOptionsEdit = function (instanceId, container) {
             thisLink = link.children('span').children('a');
         }
 
+        //Find out if this answer is 'yes' or 'no'
+        var targetBlank = 'no';
+        if(thisLink.attr('target') == '_self'){
+            targetBlank = 'no';
+        } else if (thisLink.attr('target') == '_blank') {
+            targetBlank = 'yes';
+        }
+
         var srcInput = $.dialogIn('text', 'Link Title', thisLink.html());
         var hrefInput = $.dialogIn('url', 'Link Url', thisLink.attr('href'));
+        var targetBlankInput = $.dialogIn (
+            'select',
+            'Open in New Window?',
+            {
+                'no' : 'No',
+                'yes': 'Yes'
+
+            },
+            targetBlank
+        );
 
         var form = $('<form></form>')
             .addClass('simple')
-            .append(srcInput, hrefInput)
+            .append(srcInput, hrefInput, targetBlankInput)
             .dialog({
                 title: 'Properties',
                 modal: true,
@@ -147,8 +165,15 @@ var RcmPortalOptionsEdit = function (instanceId, container) {
                         //Get user-entered data from form
                         thisLink.text(srcInput.val());
                         thisLink.attr('href', hrefInput.val());
+                        thisLink.attr('target', targetBlankInput.val());
 
                         $(this).dialog('close');
+
+                        if (targetBlankInput.val() == 'yes'){
+                            thisLink.attr('target', '_blank');
+                        } else {
+                            thisLink.removeAttr('target');
+                        }
                     }
                 }
             }
