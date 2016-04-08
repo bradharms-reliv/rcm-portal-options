@@ -69,7 +69,7 @@ var RcmPortalOptionsEdit = function (instanceId, container) {
                         $().confirm(
                             'Delete this link?<br><br>"' + a.html() + '"',
                             function () {
-                                div.remove();
+                                div.closest('.portalMenuItem').remove();
                                 //Don't let them delete the last link
                                 if (divParent.children('div').length == 0) {
                                     div.append(newLinkTemplate);
